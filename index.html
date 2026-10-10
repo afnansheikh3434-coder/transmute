@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRANSMUTE | Mastery & Discipline Hub</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              dark: '#090d16',
+              card: '#111827',
+              border: '#1f2937',
+              accent: '#6366f1'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#0b0f19] text-gray-100 min-h-screen font-sans selection:bg-emerald-500 selection:text-white pb-20">
+
+  <!-- TOP HEADER / NAVBAR -->
+  <header class="sticky top-0 z-40 bg-[#0d1322]/90 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & Tagline -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-wider uppercase bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-300 bg-clip-text text-transparent">
+            TRANSMUTE
+          </h1>
+          <p class="text-xs text-gray-400">Energy & Mastery Hub</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Bar (Streak, XP, Urge Shield SOS) -->
+      <div class="flex items-center gap-3 sm:gap-5">
+        
+        <!-- Clean Streak Badge -->
+        <div class="flex items-center gap-2 bg-gray-900/80 border border-amber-500/30 px-3 py-1.5 rounded-full shadow-inner cursor-pointer hover:border-amber-400 transition" id="streakBadge" title="Click to view streak details">
+          <i data-lucide="flame" class="w-5 h-5 text-amber-400 fill-amber-400 animate-pulse"></i>
+          <div>
+            <span class="text-xs text-gray-400 block leading-none">Clean Streak</span>
+            <span class="text-sm font-extrabold text-amber-300" id="headerStreakDays">0 Days</span>
+          </div>
+        </div>
+
+        <!-- Level & XP -->
+        <div class="hidden md:flex items-center gap-2 bg-gray-900/80 border border-indigo-500/30 px-3 py-1.5 rounded-full">
+          <i data-lucide="zap" class="w-4 h-4 text-indigo-400"></i>
+          <div>
+            <div class="flex items-center justify-between text-xs gap-3">
+              <span class="text-indigo-300 font-semibold" id="headerLevel">Lvl 1</span>
+              <span class="text-gray-400" id="headerXp">0 / 250 XP</span>
+            </div>
+            <div class="w-24 bg-gray-800 h-1.5 rounded-full overflow-hidden mt-0.5">
+              <div id="headerXpBar" class="bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🚨 THE SOS / URGE SHIELD BUTTON -->
+        <button id="openUrgeShieldBtn" class="flex items-center gap-2 bg-gradient-to-r from-red-600 via-rose-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-bold text-xs sm:text-sm px-3.5 sm:px-4 py-2 rounded-xl shadow-lg shadow-red-600/30 border border-red-400/30 transition-all hover:scale-105 active:scale-95 animate-bounce-subtle">
+          <i data-lucide="shield-alert" class="w-4 h-4 text-white"></i>
+          <span>URGE SHIELD</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
+
+    <!-- HERO / MINDSET BANNER -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-[#131b2e] to-gray-900 border border-gray-800 p-5 sm:p-6 shadow-2xl">
+      <div class="absolute -right-12 -top-12 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-2">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Sexual Transmutation Principle</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-white">
+            "Energy cannot be destroyed. Channel your idle impulse into mastery."
+          </h2>
+          <p class="text-gray-400 text-sm mt-1 max-w-2xl">
+            You don't relapse because of weakness — you relapse because of <span class="text-emerald-400 font-medium">unstructured free time & boredom</span>. Replace the idle void with Studies, Gym, Guitar, Trading, and Singing.
+          </p>
+        </div>
+
+        <!-- Quick "I am Free Right Now!" Action Generator Button -->
+        <div class="shrink-0 flex flex-col sm:flex-row gap-2">
+          <button id="openFreeTimeModalBtn" class="flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg shadow-teal-500/20 transition-all hover:scale-102">
+            <i data-lucide="compass" class="w-4 h-4"></i>
+            <span>I Have Free Time! (What to do?)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS / NAVIGATION -->
+    <div class="flex items-center justify-between border-b border-gray-800 pb-2 overflow-x-auto gap-2">
+      <div class="flex items-center gap-2">
+        <button class="nav-tab active flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition" data-tab="pillars">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          <span>The 5 Pillars</span>
+        </button>
+        <button class="nav-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition text-gray-400 hover:text-gray-200" data-tab="timer">
+          <i data-lucide="timer" class="w-4 h-4"></i>
+          <span>Focus & Metronome Hub</span>
+        </button>
+        <button class="nav-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition text-gray-400 hover:text-gray-200" data-tab="analytics">
+          <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+          <span>Analytics & Progress</span>
+        </button>
+        <button class="nav-tab flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition text-gray-400 hover:text-gray-200" data-tab="journal">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          <span>Discipline & Victory Log</span>
+        </button>
+      </div>
+
+      <!-- Quick Date indicator & Reset Day -->
+      <div class="text-xs text-gray-400 flex items-center gap-2 shrink-0">
+        <span id="currentDateStr"></span>
+      </div>
+    </div>
+
+    <!-- TAB 1: THE 5 PILLARS OF MASTERY -->
+    <div id="tab-pillars" class="tab-pane active space-y-6">
+      
+      <!-- Quick Daily Target Status -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <!-- 1. Studies -->
+        <div class="bg-gray-900/60 border border-blue-500/20 rounded-xl p-3 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-blue-400">
+            <span class="text-xs font-semibold uppercase">Studies</span>
+            <i data-lucide="book" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-2">
+            <div class="text-lg font-bold text-white" id="stat-studies-mins">0 min</div>
+            <div class="text-[11px] text-gray-400">Goal: <span id="stat-studies-goal">60</span>m</div>
+          </div>
+        </div>
+
+        <!-- 2. Gym -->
+        <div class="bg-gray-900/60 border border-orange-500/20 rounded-xl p-3 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-orange-400">
+            <span class="text-xs font-semibold uppercase">Gym / Fitness</span>
+            <i data-lucide="dumbbell" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-2">
+            <div class="text-lg font-bold text-white" id="stat-gym-mins">0 min</div>
+            <div class="text-[11px] text-gray-400">Goal: <span id="stat-gym-goal">45</span>m</div>
+          </div>
+        </div>
+
+        <!-- 3. Guitar -->
+        <div class="bg-gray-900/60 border border-purple-500/20 rounded-xl p-3 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-purple-400">
+            <span class="text-xs font-semibold uppercase">Guitar</span>
+            <i data-lucide="music-2" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-2">
+            <div class="text-lg font-bold text-white" id="stat-guitar-mins">0 min</div>
+            <div class="text-[11px] text-gray-400">Goal: <span id="stat-guitar-goal">30</span>m</div>
+          </div>
+        </div>
+
+        <!-- 4. Trading -->
+        <div class="bg-gray-900/60 border border-emerald-500/20 rounded-xl p-3 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-emerald-400">
+            <span class="text-xs font-semibold uppercase">Trading</span>
+            <i data-lucide="trending-up" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-2">
+            <div class="text-lg font-bold text-white" id="stat-trading-mins">0 min</div>
+            <div class="text-[11px] text-gray-400">Goal: <span id="stat-trading-goal">30</span>m</div>
+          </div>
+        </div>
+
+        <!-- 5. Singing -->
+        <div class="bg-gray-900/60 border border-pink-500/20 rounded-xl p-3 flex flex-col justify-between col-span-2 sm:col-span-1">
+          <div class="flex items-center justify-between text-pink-400">
+            <span class="text-xs font-semibold uppercase">Singing</span>
+            <i data-lucide="mic" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-2">
+            <div class="text-lg font-bold text-white" id="stat-singing-mins">0 min</div>
+            <div class="text-[11px] text-gray-400">Goal: <span id="stat-singing-goal">20</span>m</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARDS FOR THE 5 PILLARS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- PILLAR 1: STUDIES -->
+        <div class="bg-gray-900/80 border border-blue-900/40 hover:border-blue-500/50 rounded-2xl p-5 shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:bg-blue-500/20 transition">
+                  <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Studies & Academic</h3>
+                  <span class="text-xs text-blue-400">Mind Sharpening</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-900/40 text-blue-300 border border-blue-700/50" id="badge-studies-status">Pending</span>
+            </div>
+
+            <p class="text-xs text-gray-400 mb-4">Deep learning, exams prep, conceptual mastery. No distractions.</p>
+
+            <!-- Subtasks / Quick Checklist -->
+            <div class="space-y-2 mb-4 text-xs">
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-blue-500 focus:ring-0" data-pillar="studies" data-task="0">
+                <span class="task-text">Complete 1 Core Subject Chapter</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-blue-500 focus:ring-0" data-pillar="studies" data-task="1">
+                <span class="task-text">Solve 5 Problem Sets / Practice Questions</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-blue-500 focus:ring-0" data-pillar="studies" data-task="2">
+                <span class="task-text">Active Recall / Flashcard Review</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-800 pt-3 mt-2 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <button onclick="logQuickTime('studies', 15)" class="text-xs bg-gray-800 hover:bg-blue-600/30 text-gray-300 hover:text-blue-300 px-2 py-1 rounded-md border border-gray-700 transition">+15m</button>
+              <button onclick="logQuickTime('studies', 30)" class="text-xs bg-gray-800 hover:bg-blue-600/30 text-gray-300 hover:text-blue-300 px-2 py-1 rounded-md border border-gray-700 transition">+30m</button>
+            </div>
+            <button onclick="startSpecificTimer('studies', 'Studies')" class="text-xs bg-blue-600 hover:bg-blue-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-md shadow-blue-600/20">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              <span>Focus Timer</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PILLAR 2: GYM & PHYSICAL -->
+        <div class="bg-gray-900/80 border border-orange-900/40 hover:border-orange-500/50 rounded-2xl p-5 shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400 group-hover:bg-orange-500/20 transition">
+                  <i data-lucide="dumbbell" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Gym & Physical Power</h3>
+                  <span class="text-xs text-orange-400">Tension Transmutation</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-900/40 text-orange-300 border border-orange-700/50" id="badge-gym-status">Pending</span>
+            </div>
+
+            <p class="text-xs text-gray-400 mb-4">Channel restless physical energy into heavy lifts, pushups & endurance.</p>
+
+            <!-- Subtasks / Quick Checklist -->
+            <div class="space-y-2 mb-4 text-xs">
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-orange-500 focus:ring-0" data-pillar="gym" data-task="0">
+                <span class="task-text">Hit the Gym / 45-min Lifting Session</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-orange-500 focus:ring-0" data-pillar="gym" data-task="1">
+                <span class="task-text">50 Pushups / Calisthenics at Home</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-orange-500 focus:ring-0" data-pillar="gym" data-task="2">
+                <span class="task-text">10-min Post-Workout Stretch & Hydrate</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-800 pt-3 mt-2 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <button onclick="logQuickTime('gym', 20)" class="text-xs bg-gray-800 hover:bg-orange-600/30 text-gray-300 hover:text-orange-300 px-2 py-1 rounded-md border border-gray-700 transition">+20m</button>
+              <button onclick="logQuickTime('gym', 45)" class="text-xs bg-gray-800 hover:bg-orange-600/30 text-gray-300 hover:text-orange-300 px-2 py-1 rounded-md border border-gray-700 transition">+45m</button>
+            </div>
+            <button onclick="startSpecificTimer('gym', 'Gym & Workout')" class="text-xs bg-orange-600 hover:bg-orange-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-md shadow-orange-600/20">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              <span>Workout Timer</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PILLAR 3: GUITAR -->
+        <div class="bg-gray-900/80 border border-purple-900/40 hover:border-purple-500/50 rounded-2xl p-5 shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:bg-purple-500/20 transition">
+                  <i data-lucide="music-2" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Guitar Mastery</h3>
+                  <span class="text-xs text-purple-400">Finger Dexterity & Flow</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-900/40 text-purple-300 border border-purple-700/50" id="badge-guitar-status">Pending</span>
+            </div>
+
+            <p class="text-xs text-gray-400 mb-4">Hands on strings replace hands on screen. Master chords, scales & solos.</p>
+
+            <!-- Subtasks / Quick Checklist -->
+            <div class="space-y-2 mb-4 text-xs">
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-purple-500 focus:ring-0" data-pillar="guitar" data-task="0">
+                <span class="task-text">10-min Spider Walk / Finger Warmup</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-purple-500 focus:ring-0" data-pillar="guitar" data-task="1">
+                <span class="task-text">Practice Pentatonic / Major Scale Runs</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-purple-500 focus:ring-0" data-pillar="guitar" data-task="2">
+                <span class="task-text">Learn 1 Song Riff or Chord Progression</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-800 pt-3 mt-2 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <button onclick="logQuickTime('guitar', 15)" class="text-xs bg-gray-800 hover:bg-purple-600/30 text-gray-300 hover:text-purple-300 px-2 py-1 rounded-md border border-gray-700 transition">+15m</button>
+              <button onclick="logQuickTime('guitar', 30)" class="text-xs bg-gray-800 hover:bg-purple-600/30 text-gray-300 hover:text-purple-300 px-2 py-1 rounded-md border border-gray-700 transition">+30m</button>
+            </div>
+            <button onclick="startSpecificTimer('guitar', 'Guitar Practice')" class="text-xs bg-purple-600 hover:bg-purple-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-md shadow-purple-600/20">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              <span>Play Timer</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PILLAR 4: TRADING -->
+        <div class="bg-gray-900/80 border border-emerald-900/40 hover:border-emerald-500/50 rounded-2xl p-5 shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500/20 transition">
+                  <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Trading & Markets</h3>
+                  <span class="text-xs text-emerald-400">Discipline & Edge</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-900/40 text-emerald-300 border border-emerald-700/50" id="badge-trading-status">Pending</span>
+            </div>
+
+            <p class="text-xs text-gray-400 mb-4">Market structure, risk management, journaling setups. Zero revenge trading.</p>
+
+            <!-- Subtasks / Quick Checklist -->
+            <div class="space-y-2 mb-4 text-xs">
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-emerald-500 focus:ring-0" data-pillar="trading" data-task="0">
+                <span class="task-text">Chart Analysis & Key Levels Markup</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-emerald-500 focus:ring-0" data-pillar="trading" data-task="1">
+                <span class="task-text">Backtesting 10 Historical Setups</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-emerald-500 focus:ring-0" data-pillar="trading" data-task="2">
+                <span class="task-text">Trade Journal & Psychology Review</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-800 pt-3 mt-2 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <button onclick="logQuickTime('trading', 15)" class="text-xs bg-gray-800 hover:bg-emerald-600/30 text-gray-300 hover:text-emerald-300 px-2 py-1 rounded-md border border-gray-700 transition">+15m</button>
+              <button onclick="logQuickTime('trading', 30)" class="text-xs bg-gray-800 hover:bg-emerald-600/30 text-gray-300 hover:text-emerald-300 px-2 py-1 rounded-md border border-gray-700 transition">+30m</button>
+            </div>
+            <button onclick="startSpecificTimer('trading', 'Trading Study')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-md shadow-emerald-600/20">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              <span>Trading Timer</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PILLAR 5: SINGING -->
+        <div class="bg-gray-900/80 border border-pink-900/40 hover:border-pink-500/50 rounded-2xl p-5 shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 group-hover:bg-pink-500/20 transition">
+                  <i data-lucide="mic" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Singing & Vocal Art</h3>
+                  <span class="text-xs text-pink-400">Expression & Breath</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-pink-900/40 text-pink-300 border border-pink-700/50" id="badge-singing-status">Pending</span>
+            </div>
+
+            <p class="text-xs text-gray-400 mb-4">Diaphragm breath control, pitch training, emotional vocal expression.</p>
+
+            <!-- Subtasks / Quick Checklist -->
+            <div class="space-y-2 mb-4 text-xs">
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-pink-500 focus:ring-0" data-pillar="singing" data-task="0">
+                <span class="task-text">Lip Trills & Vocal Chord Warmup</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-pink-500 focus:ring-0" data-pillar="singing" data-task="1">
+                <span class="task-text">Solfeggio Pitch & Scale Practice</span>
+              </label>
+              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
+                <input type="checkbox" class="pillar-checkbox rounded bg-gray-800 border-gray-700 text-pink-500 focus:ring-0" data-pillar="singing" data-task="2">
+                <span class="task-text">Sing Full Track with Dynamic Control</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-800 pt-3 mt-2 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <button onclick="logQuickTime('singing', 15)" class="text-xs bg-gray-800 hover:bg-pink-600/30 text-gray-300 hover:text-pink-300 px-2 py-1 rounded-md border border-gray-700 transition">+15m</button>
+              <button onclick="logQuickTime('singing', 20)" class="text-xs bg-gray-800 hover:bg-pink-600/30 text-gray-300 hover:text-pink-300 px-2 py-1 rounded-md border border-gray-700 transition">+20m</button>
+            </div>
+            <button onclick="startSpecificTimer('singing', 'Singing Session')" class="text-xs bg-pink-600 hover:bg-pink-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-md shadow-pink-600/20">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              <span>Vocal Timer</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- QUICK CUSTOM LOG / NOTES CARD -->
+        <div class="bg-gray-900/60 border border-dashed border-gray-800 hover:border-gray-700 rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-gray-300 mb-2 font-bold text-sm">
+              <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i>
+              <span>Quick Session Note / Milestone</span>
+            </div>
+            <p class="text-xs text-gray-400 mb-3">Record what you achieved or practiced today to build positive reinforcement.</p>
+            <textarea id="quickSessionNoteInput" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-3 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-emerald-500 resize-none h-24" placeholder="E.g., Practiced barre chords for 20 mins, then solved 10 calculus problems. Feeling sharp."></textarea>
+          </div>
+          <div class="mt-3 flex justify-end">
+            <button onclick="saveQuickNote()" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded-lg flex items-center gap-1.5 transition">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              <span>Save Note (+20 XP)</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 2: TIMER & MUSIC TOOLS (METRONOME + FOCUS POMODORO) -->
+    <div id="tab-timer" class="tab-pane hidden space-y-6">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- FOCUS / POMODORO TIMER -->
+        <div class="bg-gray-900/80 border border-gray-800 rounded-2xl p-6 shadow-xl flex flex-col items-center justify-center text-center relative overflow-hidden">
+          <div class="w-full flex items-center justify-between mb-4">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="clock" class="w-4 h-4 text-indigo-400"></i>
+              Active Focus Engine
+            </span>
+            <select id="timerPillarSelect" class="bg-gray-800 border border-gray-700 text-xs rounded-lg px-2.5 py-1 text-gray-200 focus:outline-none focus:border-indigo-500">
+              <option value="studies">📚 Studies</option>
+              <option value="gym">🏋️ Gym / Physical</option>
+              <option value="guitar">🎸 Guitar</option>
+              <option value="trading">📈 Trading</option>
+              <option value="singing">🎤 Singing</option>
+            </select>
+          </div>
+
+          <!-- Timer Display Circle -->
+          <div class="my-6 relative flex items-center justify-center">
+            <svg class="w-56 h-56 transform -rotate-90">
+              <circle cx="112" cy="112" r="98" stroke="currentColor" stroke-width="8" class="text-gray-800 fill-transparent" />
+              <circle id="timerCircleProgress" cx="112" cy="112" r="98" stroke="currentColor" stroke-width="8" class="text-indigo-500 fill-transparent stroke-dashoffset transition-all duration-500" stroke-dasharray="615.75" stroke-dashoffset="0" stroke-linecap="round" />
+            </svg>
+            <div class="absolute flex flex-col items-center">
+              <span id="timerDisplay" class="text-5xl font-mono font-black tracking-tight text-white">25:00</span>
+              <span id="timerPillarLabel" class="text-xs text-indigo-300 font-medium mt-1">Studies</span>
+            </div>
+          </div>
+
+          <!-- Presets -->
+          <div class="flex items-center gap-2 mb-6">
+            <button onclick="setTimerDuration(10)" class="text-xs px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition">10 min</button>
+            <button onclick="setTimerDuration(20)" class="text-xs px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition">20 min</button>
+            <button onclick="setTimerDuration(25)" class="text-xs px-3 py-1.5 rounded-lg bg-indigo-600/30 border border-indigo-500/50 text-indigo-200 transition">25 min (Pomo)</button>
+            <button onclick="setTimerDuration(45)" class="text-xs px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition">45 min</button>
+            <button onclick="setTimerDuration(60)" class="text-xs px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition">60 min</button>
+          </div>
+
+          <!-- Timer Controls -->
+          <div class="flex items-center gap-4">
+            <button id="timerToggleBtn" onclick="toggleTimer()" class="w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-600/30 transition-all hover:scale-105 active:scale-95">
+              <i id="timerToggleIcon" data-lucide="play" class="w-6 h-6 ml-0.5"></i>
+            </button>
+            <button onclick="resetTimer()" class="w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white flex items-center justify-center border border-gray-700 transition">
+              <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- INTEGRATED AUDIO METRONOME (For Guitar & Singing & Rhythm) -->
+        <div class="bg-gray-900/80 border border-gray-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                  <i data-lucide="activity" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-bold text-white text-sm">Interactive Metronome</h3>
+              </div>
+              <span class="text-xs text-purple-400 font-mono" id="tempoMarking">Moderato</span>
+            </div>
+
+            <p class="text-xs text-gray-400 mb-6">
+              Essential for guitar discipline and vocal tempo precision. Stay locked into the beat to prevent mind wandering.
+            </p>
+
+            <!-- Metronome Visual Indicator -->
+            <div class="flex items-center justify-center gap-3 my-4" id="metronomeDots">
+              <div class="w-5 h-5 rounded-full bg-gray-800 border border-gray-700 transition-all metro-dot" data-beat="1"></div>
+              <div class="w-5 h-5 rounded-full bg-gray-800 border border-gray-700 transition-all metro-dot" data-beat="2"></div>
+              <div class="w-5 h-5 rounded-full bg-gray-800 border border-gray-700 transition-all metro-dot" data-beat="3"></div>
+              <div class="w-5 h-5 rounded-full bg-gray-800 border border-gray-700 transition-all metro-dot" data-beat="4"></div>
+            </div>
+
+            <!-- BPM Counter & Slider -->
+            <div class="text-center my-6">
+              <div class="text-5xl font-mono font-bold text-white mb-2" id="bpmValue">100</div>
+              <span class="text-xs text-gray-400 uppercase tracking-widest">BPM</span>
+
+              <div class="mt-4 px-4 flex items-center gap-3">
+                <button onclick="adjustBpm(-5)" class="w-8 h-8 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center text-sm font-bold">-5</button>
+                <input type="range" id="bpmSlider" min="40" max="220" value="100" class="w-full accent-purple-500 bg-gray-800 rounded-lg h-2 cursor-pointer">
+                <button onclick="adjustBpm(5)" class="w-8 h-8 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 flex items-center justify-center text-sm font-bold">+5</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between border-t border-gray-800 pt-4 mt-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-400">Beats:</span>
+              <select id="beatsPerMeasure" class="bg-gray-800 border border-gray-700 text-xs rounded-lg px-2 py-1 text-gray-200 focus:outline-none">
+                <option value="4">4/4</option>
+                <option value="3">3/4</option>
+                <option value="2">2/4</option>
+                <option value="6">6/8</option>
+              </select>
+            </div>
+            <button id="metronomeToggleBtn" onclick="toggleMetronome()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-lg shadow-purple-600/20 transition-all">
+              <i data-lucide="play" class="w-4 h-4"></i>
+              <span>Start Metronome</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 3: ANALYTICS & INSIGHTS -->
+    <div id="tab-analytics" class="tab-pane hidden space-y-6">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Time Distribution Chart -->
+        <div class="bg-gray-900/80 border border-gray-800 rounded-2xl p-5 shadow-xl lg:col-span-2">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400"></i>
+              Weekly Pillar Time Investment (Minutes)
+            </h3>
+            <span class="text-xs text-gray-400">Last 7 Days</span>
+          </div>
+          <div class="h-64 relative">
+            <canvas id="pillarBarChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Discipline Score & Anti-Relapse Stats -->
+        <div class="bg-gray-900/80 border border-gray-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-white text-sm mb-4 flex items-center gap-2">
+              <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+              Discipline & Defense Metrics
+            </h3>
+
+            <div class="space-y-4">
+              <div class="bg-gray-950/60 p-3.5 rounded-xl border border-gray-800 flex items-center justify-between">
+                <div>
+                  <span class="text-xs text-gray-400 block">Clean Streak Record</span>
+                  <span class="text-xl font-bold text-amber-300" id="statBestStreak">0 Days</span>
+                </div>
+                <i data-lucide="trophy" class="w-6 h-6 text-amber-400/80"></i>
+              </div>
+
+              <div class="bg-gray-950/60 p-3.5 rounded-xl border border-gray-800 flex items-center justify-between">
+                <div>
+                  <span class="text-xs text-gray-400 block">Urges Resisted & Defeated</span>
+                  <span class="text-xl font-bold text-emerald-400" id="statUrgesDefeated">0</span>
+                </div>
+                <i data-lucide="shield-check" class="w-6 h-6 text-emerald-400/80"></i>
+              </div>
+
+              <div class="bg-gray-950/60 p-3.5 rounded-xl border border-gray-800 flex items-center justify-between">
+                <div>
+                  <span class="text-xs text-gray-400 block">Total Focus Hours Logged</span>
+                  <span class="text-xl font-bold text-indigo-400" id="statTotalHours">0.0 hrs</span>
+                </div>
+                <i data-lucide="clock" class="w-6 h-6 text-indigo-400/80"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Streak Action Buttons -->
+          <div class="pt-4 border-t border-gray-800 mt-4 flex items-center gap-2">
+            <button onclick="openRelapseModal()" class="w-full text-xs bg-red-950/40 hover:bg-red-900/50 text-red-300 border border-red-800/50 py-2 rounded-xl font-medium transition flex items-center justify-center gap-1.5">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Log Slip & Reset (Without Shame)</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 4: DISCIPLINE & VICTORY LOG -->
+    <div id="tab-journal" class="tab-pane hidden space-y-6">
+      
+      <div class="bg-gray-900/80 border border-gray-800 rounded-2xl p-6 shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="font-bold text-white text-base flex items-center gap-2">
+              <i data-lucide="history" class="w-4 h-4 text-emerald-400"></i>
+              Victory & Discipline History
+            </h3>
+            <p class="text-xs text-gray-400 mt-0.5">Chronicle of resisted impulses, completed study blocks, and creative breakthroughs.</p>
+          </div>
+          <button onclick="clearJournalHistory()" class="text-xs text-gray-500 hover:text-red-400 transition">Clear History</button>
+        </div>
+
+        <div id="journalEmptyState" class="text-center py-12 text-gray-500">
+          <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-2 stroke-1"></i>
+          <p class="text-sm">No log entries yet. Defeat an urge or save a session note to begin your journey!</p>
+        </div>
+
+        <div id="journalList" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Backup / Export / Import -->
+      <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider">Data Privacy & Local Storage</h4>
+          <p class="text-xs text-gray-500">All data stays strictly on your browser. Export anytime to back up your records.</p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="exportData()" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 flex items-center gap-1.5 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Export Backup</span>
+          </button>
+          <label class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg border border-gray-700 flex items-center gap-1.5 cursor-pointer transition">
+            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+            <span>Import</span>
+            <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: 🚨 URGE SHIELD (PANIC / SOS RESCUE CENTER)                      -->
+  <!-- ========================================================================= -->
+  <div id="urgeShieldModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden transition-opacity">
+    <div class="bg-[#101625] border-2 border-red-500/50 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl shadow-red-500/10 animate-scale-up">
+      
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-red-950/80 via-rose-950/80 to-gray-900 p-5 border-b border-red-500/30 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400">
+            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              Urge Shield Active
+              <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded font-bold">EMERGENCY PROTOCOL</span>
+            </h2>
+            <p class="text-xs text-red-200/70">Pause. Step back from the screen. Your future self is counting on you.</p>
+          </div>
+        </div>
+        <button onclick="closeUrgeShield()" class="text-gray-400 hover:text-white p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+        
+        <!-- Neuroscience Fact Box -->
+        <div class="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex items-start gap-3">
+          <i data-lucide="brain-circuit" class="w-5 h-5 text-red-400 shrink-0 mt-0.5"></i>
+          <div class="text-xs text-red-200 leading-relaxed">
+            <span class="font-bold text-white">Remember the 90-Second Rule:</span> Neurochemical urges peak within 90 seconds to 3 minutes, then start to decline if you do not feed the fantasy. The feeling you are having is <em>boredom and dopamine seeking</em>, not physical necessity. Ride the wave!
+          </div>
+        </div>
+
+        <!-- Urge Surfing Breathing Ring -->
+        <div class="bg-gray-950/80 border border-gray-800 rounded-2xl p-6 text-center flex flex-col items-center">
+          <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Urge Surfing (Box Breathing)</span>
+          
+          <div class="relative w-44 h-44 flex items-center justify-center my-3">
+            <div id="breathRing" class="absolute w-36 h-36 rounded-full border-4 border-teal-500/40 bg-teal-500/10 transition-all duration-4000 flex items-center justify-center">
+            </div>
+            <div class="relative z-10 flex flex-col items-center">
+              <span id="breathPhaseText" class="text-base font-extrabold text-teal-300">BREATHE IN</span>
+              <span id="breathCountText" class="text-2xl font-mono font-bold text-white mt-1">4s</span>
+            </div>
+          </div>
+
+          <p class="text-xs text-gray-400 max-w-sm mt-2">
+            Inhale deeply through your nose, hold, then slow exhale. Calm your autonomic nervous system.
+          </p>
+        </div>
+
+        <!-- Instant Physical / Creative Substitution Circuit -->
+        <div>
+          <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+            <span>Choose Your Instant Transmutation Mission Right Now:</span>
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <!-- Option 1: Gym / Physical -->
+            <button onclick="pickEmergencyMission('Drop and do 20 pushups + 30 squats right now away from your bed/desk!')" class="p-3.5 rounded-xl bg-gray-900 border border-orange-500/30 hover:border-orange-500 hover:bg-orange-950/20 text-left transition flex items-start gap-2.5">
+              <span class="text-lg">🏋️</span>
+              <div>
+                <strong class="text-orange-300 block">The 20-Pushup Shock</strong>
+                <span class="text-gray-400">Instantly channels blood flow and adrenaline into muscles.</span>
+              </div>
+            </button>
+
+            <!-- Option 2: Guitar -->
+            <button onclick="pickEmergencyMission('Grab your guitar right now! Tune it and play 1 song or scale for 5 minutes.')" class="p-3.5 rounded-xl bg-gray-900 border border-purple-500/30 hover:border-purple-500 hover:bg-purple-950/20 text-left transition flex items-start gap-2.5">
+              <span class="text-lg">🎸</span>
+              <div>
+                <strong class="text-purple-300 block">Grab The Guitar</strong>
+                <span class="text-gray-400">Occupies your hands and re-routes dopamine to creative mastery.</span>
+              </div>
+            </button>
+
+            <!-- Option 3: Cold Water Shock -->
+            <button onclick="pickEmergencyMission('Go to bathroom sink immediately: Splash cold water on your face 5 times and drink a full glass of cold water.')" class="p-3.5 rounded-xl bg-gray-900 border border-blue-500/30 hover:border-blue-500 hover:bg-blue-950/20 text-left transition flex items-start gap-2.5">
+              <span class="text-lg">🧊</span>
+              <div>
+                <strong class="text-blue-300 block">Mammalian Dive Reflex</strong>
+                <span class="text-gray-400">Splash freezing water on eyes & forehead to instantly drop heart rate.</span>
+              </div>
+            </button>
+
+            <!-- Option 4: Vocal / Singing -->
+            <button onclick="pickEmergencyMission('Stand upright: do 2 minutes of vigorous lip trills and sing a chorus loudly.')" class="p-3.5 rounded-xl bg-gray-900 border border-pink-500/30 hover:border-pink-500 hover:bg-pink-950/20 text-left transition flex items-start gap-2.5">
+              <span class="text-lg">🎤</span>
+              <div>
+                <strong class="text-pink-300 block">Vocal Power Blast</strong>
+                <span class="text-gray-400">Engages diaphragm and releases endorphins naturally.</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer / Victory Button -->
+      <div class="bg-gray-950 p-4 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span class="text-xs text-gray-400">Did you ride out the wave and resist?</span>
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button onclick="closeUrgeShield()" class="w-1/2 sm:w-auto text-xs px-4 py-2.5 text-gray-400 hover:text-white transition">Cancel</button>
+          <button onclick="logUrgeDefeated()" class="w-1/2 sm:w-auto text-xs bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition hover:scale-102">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>I Defeated The Urge! (+100 XP)</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: "I AM FREE RIGHT NOW!" BOREDOM BUSTER GENERATOR                  -->
+  <!-- ========================================================================= -->
+  <div id="freeTimeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity">
+    <div class="bg-[#101625] border border-teal-500/30 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-up">
+      
+      <div class="p-5 border-b border-gray-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+            <i data-lucide="compass" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white text-base">Free Time Auto-Pilot</h3>
+            <p class="text-xs text-gray-400">Don't let empty idle minutes turn into autopilot relapse.</p>
+          </div>
+        </div>
+        <button onclick="closeFreeTimeModal()" class="text-gray-400 hover:text-white p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div>
+          <label class="text-xs font-semibold text-gray-300 block mb-2">How much free time do you currently have?</label>
+          <div class="grid grid-cols-4 gap-2">
+            <button onclick="selectFreeDuration(15)" class="free-dur-btn active text-xs py-2 rounded-xl border border-teal-500 bg-teal-500/20 text-teal-200 font-bold" data-dur="15">15 Min</button>
+            <button onclick="selectFreeDuration(30)" class="free-dur-btn text-xs py-2 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold hover:text-white" data-dur="30">30 Min</button>
+            <button onclick="selectFreeDuration(45)" class="free-dur-btn text-xs py-2 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold hover:text-white" data-dur="45">45 Min</button>
+            <button onclick="selectFreeDuration(60)" class="free-dur-btn text-xs py-2 rounded-xl border border-gray-800 bg-gray-900 text-gray-400 font-bold hover:text-white" data-dur="60">60 Min</button>
+          </div>
+        </div>
+
+        <!-- Generated Mission Card -->
+        <div class="bg-gray-950/80 border border-gray-800 rounded-2xl p-4 text-center">
+          <span class="text-[11px] font-bold text-teal-400 uppercase tracking-wider block mb-1">Your Recommended Mission</span>
+          <div id="freeMissionPillarBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-purple-500/10 text-purple-300 mb-2">
+            🎸 Guitar Practice
+          </div>
+          <p id="freeMissionDescription" class="text-sm text-gray-200 font-medium my-2">
+            "Pick up your guitar. Run the minor pentatonic scale at 80 BPM, then practice shifting between C and G chords smoothly."
+          </p>
+          <button onclick="regenerateFreeMission()" class="mt-2 text-xs text-teal-400 hover:text-teal-300 flex items-center justify-center gap-1 mx-auto">
+            <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+            <span>Shuffle Another Mission</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-gray-950 p-4 border-t border-gray-800 flex items-center justify-end gap-3">
+        <button onclick="closeFreeTimeModal()" class="text-xs text-gray-400 hover:text-white px-3 py-2">Close</button>
+        <button onclick="acceptFreeMission()" class="text-xs bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-teal-600/20 flex items-center gap-1.5 transition">
+          <i data-lucide="play" class="w-4 h-4"></i>
+          <span>Start This Mission Now</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: COMPASSIONATE RELAPSE LOG (ZERO GUILT, 100% LEARNING)            -->
+  <!-- ========================================================================= -->
+  <div id="relapseModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden transition-opacity">
+    <div class="bg-[#101625] border border-gray-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-up">
+      
+      <div class="p-5 border-b border-gray-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <i data-lucide="shield" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white text-base">Reset With Wisdom</h3>
+            <p class="text-xs text-gray-400">No shame. Relapse is data on where your environment needs tuning.</p>
+          </div>
+        </div>
+        <button onclick="closeRelapseModal()" class="text-gray-400 hover:text-white p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-gray-300 block mb-1">What was the primary trigger?</label>
+          <select id="relapseTriggerSelect" class="w-full bg-gray-900 border border-gray-800 rounded-xl p-2.5 text-xs text-gray-200 focus:outline-none focus:border-amber-500">
+            <option value="Boredom / Empty Free Time">Boredom / Empty Free Time</option>
+            <option value="Phone in bed / Late night browsing">Phone in bed / Late night browsing</option>
+            <option value="Stress / Anxiety / Escape from study pressure">Stress / Anxiety / Escape from study pressure</option>
+            <option value="Social media trigger (Instagram / TikTok / X)">Social media trigger (Instagram / TikTok / X)</option>
+            <option value="Fatigue / Tiredness / Exhaustion">Fatigue / Tiredness / Exhaustion</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-gray-300 block mb-1">What 1 environmental rule will you apply right now?</label>
+          <input type="text" id="relapseRuleInput" class="w-full bg-gray-900 border border-gray-800 rounded-xl p-2.5 text-xs text-gray-200 focus:outline-none focus:border-amber-500" placeholder="E.g., Keep phone charging in living room tonight, keep bedroom door open">
+        </div>
+
+        <div class="p-3 bg-gray-950/70 border border-gray-800 rounded-xl text-xs text-gray-400">
+          💡 <strong>Remember:</strong> A slip does not erase the neural pathways or discipline you built. You stand back up immediately.
+        </div>
+      </div>
+
+      <div class="bg-gray-950 p-4 border-t border-gray-800 flex items-center justify-end gap-3">
+        <button onclick="closeRelapseModal()" class="text-xs text-gray-400 hover:text-white px-3 py-2">Cancel</button>
+        <button onclick="confirmRelapseReset()" class="text-xs bg-amber-600 hover:bg-amber-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg transition">
+          Confirm Reset & Rise Again
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AUDIO ELEMENTS GENERATED VIA WEB AUDIO API IN app.js -->
+  <script src="app.js"></script>
+</body>
+</html>

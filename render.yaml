@@ -1,0 +1,19 @@
+services:
+  # Option 1 (Recommended): Render Static Site
+  # Fastest, 100% free, served via global CDN, no spin-down/sleep delays
+  - type: web
+    name: transmute-tracker
+    env: static
+    buildCommand: ""
+    staticPublishPath: .
+
+  # Option 2: Render Python Web Service
+  # If you prefer running as a Python service
+  # - type: web
+  #   name: transmute-tracker-python
+  #   env: python
+  #   buildCommand: "pip install -r requirements.txt"
+  #   startCommand: "python server.py"
+  #   envVars:
+  #     - key: PORT
+  #       value: 10000

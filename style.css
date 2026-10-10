@@ -1,0 +1,100 @@
+/* Custom Styles & Animations for Transmute */
+
+@keyframes pulseSubtle {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.7);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: pulseSubtle 2.5s infinite ease-in-out;
+}
+
+@keyframes scaleUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.2s ease-out forwards;
+}
+
+/* Nav tabs */
+.nav-tab.active {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+/* Metronome dot active state */
+.metro-dot.active {
+  background-color: #a855f7;
+  border-color: #c084fc;
+  box-shadow: 0 0 12px #a855f7;
+  transform: scale(1.25);
+}
+
+.metro-dot.downbeat {
+  background-color: #ec4899;
+  border-color: #f472b6;
+  box-shadow: 0 0 15px #ec4899;
+  transform: scale(1.35);
+}
+
+/* Breathing animation */
+.breath-in {
+  transform: scale(1.4);
+  border-color: #14b8a6;
+  background-color: rgba(20, 184, 166, 0.25);
+  box-shadow: 0 0 35px rgba(20, 184, 166, 0.4);
+}
+
+.breath-hold {
+  transform: scale(1.4);
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 35px rgba(59, 130, 246, 0.4);
+}
+
+.breath-out {
+  transform: scale(1);
+  border-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Strikethrough completed task */
+input[type="checkbox"]:checked + .task-text {
+  text-decoration: line-through;
+  color: #6b7280;
+}
